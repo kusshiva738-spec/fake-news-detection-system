@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Authority Verification</title>
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+background:#1e3c72;
+color:white;
+padding:40px;
+}
+
+textarea{
+width:60%;
+height:120px;
+border-radius:10px;
+padding:10px;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:10px;
+margin:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+.true{
+background:green;
+color:white;
+}
+
+.fake{
+background:red;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>News Verification Panel</h2>
+
+<h3>{{news}}</h3>
+
+<form method="POST">
+
+<textarea name="comment" placeholder="Write verification comment"></textarea>
+
+<br><br>
+
+<button class="true" name="status" value="Verified True">Verify True</button>
+
+<button class="fake" name="status" value="Verified Fake">Mark Fake</button>
+
+</form>
+
+</body>
+</html>

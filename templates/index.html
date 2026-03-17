@@ -1,0 +1,318 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>AI Fake News Detection</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+
+body{
+font-family:Segoe UI;
+margin:0;
+color:white;
+text-align:center;
+}
+
+/* Animated Colorful Background */
+
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,#ff6a00,#ee0979,#00c9ff,#92fe9d);
+background-size:400% 400%;
+animation:gradientMove 12s ease infinite;
+z-index:-1;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Title */
+
+h1{
+margin-top:40px;
+font-size:40px;
+}
+
+/* Mission Vision */
+
+.mission-section{
+display:flex;
+justify-content:center;
+gap:40px;
+margin-top:40px;
+flex-wrap:wrap;
+}
+
+.mission-card{
+width:350px;
+padding:25px;
+border-radius:15px;
+background:#1abc9c;
+color:white;
+box-shadow:0px 0px 20px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+.mission-card:hover{
+transform:translateY(-8px);
+box-shadow:0px 0px 25px rgba(255,255,255,0.6);
+}
+
+.mission-title{
+font-size:22px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+/* Detector Box */
+
+.container{
+width:60%;
+margin:auto;
+margin-top:50px;
+background:rgba(0,0,0,0.65);
+padding:35px;
+border-radius:20px;
+box-shadow:0px 0px 25px rgba(0,255,200,0.6);
+}
+
+/* Text Area */
+
+textarea{
+width:80%;
+height:120px;
+border-radius:10px;
+padding:12px;
+font-size:16px;
+border:none;
+outline:none;
+}
+
+/* Buttons */
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#ff512f,#dd2476,#00c9ff);
+color:white;
+font-size:16px;
+cursor:pointer;
+margin-top:15px;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0px 0px 15px white;
+}
+
+/* Score Bar */
+
+.scorebar{
+width:70%;
+height:25px;
+background:#333;
+margin:auto;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.fill{
+height:100%;
+background:linear-gradient(90deg,red,yellow,green);
+}
+
+/* Developer Section */
+
+.developer-section{
+margin-top:70px;
+}
+
+.dev-container{
+display:flex;
+justify-content:center;
+gap:60px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.dev-card{
+text-align:center;
+text-decoration-color: chocolate;
+color: rgb(239, 247, 3);
+}
+
+.dev-img{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid gold;
+box-shadow:0px 0px 25px gold;
+transition:0.3s;
+}
+
+.dev-img:hover{
+transform:scale(1.1);
+}
+
+.dev-name{
+margin-top:10px;
+font-size:18px;
+font-weight:bold;
+}
+
+/* Footer */
+
+footer{
+margin-top:40px;
+padding:20px;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<h1>AI Fake News Detection System</h1>
+
+
+<!-- Mission & Vision -->
+
+<div class="mission-section">
+
+<div class="mission-card">
+<div class="mission-title">🚀 Our Mission</div>
+<p>
+To develop an intelligent system that helps users detect fake news using AI similarity analysis and trusted news sources.
+</p>
+</div>
+
+<div class="mission-card">
+<div class="mission-title">💡 Our Vision</div>
+<p>
+To build a digital ecosystem where misinformation is reduced and people rely on verified information.
+</p>
+</div>
+
+</div>
+
+
+<!-- Detector Section -->
+
+<div class="container">
+
+<form method="POST">
+
+<textarea name="news" placeholder="Enter News Headline"></textarea>
+
+<br>
+
+<button type="submit">Check News</button>
+
+</form>
+
+
+{% if result %}
+
+<h2>{{result}}</h2>
+
+{% endif %}
+
+
+{% if score %}
+
+<h3>AI Similarity Score</h3>
+
+<div class="scorebar">
+
+<div class="fill" style="width:{{score}}%"></div>
+
+</div>
+
+<p>{{score}}%</p>
+
+{% endif %}
+
+
+{% if source %}
+
+<h3>Source</h3>
+
+<p>{{source}}</p>
+
+<p>{{date}}</p>
+
+{% endif %}
+
+
+{% if email %}
+
+<a href="mailto:{{email}}?subject=News Verification&body=Please verify this news: {{news}}">
+<button>Send Verification Email</button>
+</a>
+
+{% endif %}
+
+</div>
+
+
+<!-- Developer Section -->
+
+<div class="developer-section">
+
+<h2>Developed By</h2>
+
+<div class="dev-container">
+
+<div class="dev-card">
+<img src="{{ url_for('static', filename='shivam.jpeg') }}" class="dev-img">
+<div class="dev-name">Shivam Kushwah</div>
+</div>
+
+<div class="dev-card">
+<img src="{{ url_for('static', filename='shiv.jpeg') }}" class="dev-img">
+<div class="dev-name">Shiv Tiwari</div>
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+©copyright 2026 AI Fake News Detection System
+</footer>
+
+
+<script>
+
+particlesJS("particles-js",{
+particles:{
+number:{value:80},
+color:{value:["#ffffff"]},
+line_linked:{enable:true,color:"#ffffff"},
+move:{speed:2}
+}
+});
+
+</script>
+
+</body>
+</html>
+```

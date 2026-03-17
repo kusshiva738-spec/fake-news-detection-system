@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Admin Dashboard</title>
+
+<style>
+
+body{
+font-family:Segoe UI;
+background:#0f2027;
+background:linear-gradient(135deg,#2c5364,#203a43,#0f2027);
+color:white;
+text-align:center;
+margin:0;
+}
+
+h1{
+margin-top:30px;
+}
+
+.stats{
+margin-top:20px;
+font-size:20px;
+}
+
+table{
+margin:auto;
+margin-top:30px;
+border-collapse:collapse;
+width:90%;
+background:rgba(0,0,0,0.6);
+}
+
+th,td{
+padding:12px;
+border:1px solid white;
+}
+
+th{
+background:#00c9ff;
+color:black;
+}
+
+tr:nth-child(even){
+background:#16213e;
+}
+
+a{
+color:#00ffff;
+text-decoration:none;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<div class="stats">
+Total News Under Verification: <b>{{total}}</b>
+</div>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>News</th>
+<th>City</th>
+<th>Status</th>
+<th>Comment</th>
+<th>Verification Page</th>
+</tr>
+
+{% for row in data %}
+
+<tr>
+
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+<td>{{row[2]}}</td>
+<td>{{row[3]}}</td>
+<td>{{row[4]}}</td>
+
+<td>
+<a href="/verify/{{row[0]}}?token={{row[5]}}" target="_blank">
+Open
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
+```
