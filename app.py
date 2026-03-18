@@ -92,8 +92,7 @@ def index():
 
                 id = c.lastrowid
 
-                verify_link = f"http://127.0.0.1:5000/verify/{id}?token={token}"
-
+                verify_link = verify_link = f"/verify/{id}?token={token}"
             conn.close()
 
         return render_template("index.html",
@@ -168,5 +167,5 @@ def admin():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run
 
