@@ -1,5 +1,4 @@
-
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect
 import sqlite3
 import feedparser
 import urllib.parse
@@ -15,6 +14,7 @@ def init_db():
 
     c.execute("""CREATE TABLE IF NOT EXISTS verification(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
     news TEXT,
     city TEXT,
     status TEXT,
@@ -27,6 +27,14 @@ def init_db():
 
 init_db()
 
+# WELCOME PAGE
+
+@app.route("/", methods=["GET","POST"])
+def welcome():
+    if request.method == "POST":
+        name = request.form["name"]
+        return redirect(f"/index?name={name}")
+    return render_template("welcome.html")
 
 # NEWS CHECK FUNCTION
 
@@ -50,11 +58,12 @@ def check_news(news):
 
     return result,score,source,date
 
+# INDEX PAGE
 
-# HOME PAGE
-
-@app.route("/",methods=["GET","POST"])
+@app.route("/index",methods=["GET","POST"])
 def index():
+
+    name = request.args.get("name")
 
     if request.method == "POST":
 
@@ -77,7 +86,7 @@ def index():
             data = c.fetchone()
 
             if data:
-                verification_status = data[3]
+                verification_status = data[4]
 
             else:
                 verification_status = "Under Verification"
@@ -85,17 +94,19 @@ def index():
 
                 token = secrets.token_hex(16)
 
-                c.execute("INSERT INTO verification(news,city,status,token) VALUES(?,?,?,?)",
-                (news,city,"Under Verification",token))
+                c.execute("INSERT INTO verification(name,news,city,status,token) VALUES(?,?,?,?,?)",
+                (name,news,city,"Under Verification",token))
 
                 conn.commit()
 
                 id = c.lastrowid
 
-                verify_link = verify_link = f"/verify/{id}?token={token}"
+                verify_link = f"/verify/{id}?token={token}"
+
             conn.close()
 
         return render_template("index.html",
+        name=name,
         result=result,
         score=score,
         source=source,
@@ -105,8 +116,7 @@ def index():
         status=verification_status,
         verify_link=verify_link)
 
-    return render_template("index.html")
-
+    return render_template("index.html",name=name)
 
 # VERIFY PAGE
 
@@ -122,12 +132,12 @@ def verify(id):
     data = c.fetchone()
 
     if not data:
-        return "<h2>Invalid verification request</h2>"
+        return "<h2>Invalid request</h2>"
 
     news,db_token = data
 
     if token != db_token:
-        return "<h2>Unauthorized verification link</h2>"
+        return "<h2>Unauthorized</h2>"
 
     if request.method == "POST":
 
@@ -140,12 +150,11 @@ def verify(id):
         conn.commit()
         conn.close()
 
-        return "<h2>Verification Updated Successfully</h2>"
+        return "<h2>Verification Updated</h2>"
 
     conn.close()
 
     return render_template("verify.html",news=news,id=id)
-
 
 # ADMIN PANEL
 
@@ -165,7 +174,5 @@ def admin():
 
     return render_template("admin.html",data=data,total=total)
 
-
 if __name__ == "__main__":
     app.run()
-
