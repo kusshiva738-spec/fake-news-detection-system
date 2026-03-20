@@ -1,10 +1,17 @@
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect,session
 import sqlite3
 import feedparser
 import urllib.parse
 import secrets
 
 app = Flask(__name__)
+
+# 🔐 Session Secret Key
+app.secret_key = "supersecretkey123"
+
+# 👤 Admin Credentials
+ADMIN_EMAIL = "admin@gmail.com"
+ADMIN_PASSWORD = "Shiva@8815"
 
 # DATABASE
 
@@ -156,10 +163,30 @@ def verify(id):
 
     return render_template("verify.html",news=news,id=id)
 
-# ADMIN PANEL
+# 🔐 ADMIN LOGIN
+
+@app.route("/admin-login", methods=["GET","POST"])
+def admin_login():
+
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        if email == ADMIN_EMAIL and password == ADMIN_PASSWORD:
+            session["admin"] = True
+            return redirect("/admin")
+        else:
+            return "<h3>Invalid Credentials</h3>"
+
+    return render_template("admin_login.html")
+
+# 🔐 ADMIN PANEL (PROTECTED)
 
 @app.route("/admin")
 def admin():
+
+    if not session.get("admin"):
+        return redirect("/admin-login")
 
     conn = sqlite3.connect("verification.db")
     c = conn.cursor()
@@ -173,6 +200,15 @@ def admin():
     conn.close()
 
     return render_template("admin.html",data=data,total=total)
+
+# 🔓 LOGOUT
+
+@app.route("/logout")
+def logout():
+    session.pop("admin", None)
+    return redirect("/")
+
+# RUN
 
 if __name__ == "__main__":
     app.run()
